@@ -21,7 +21,7 @@ def get_db_connection():
 #dunction to reterive...
 def get_post(id):
     conn= get_db_connection
-    post = conn.execute('SELECT * FROM posts WHERE id = ?', (post_id,)).fetchone() # type: ignore
+    post = conn.execute('SELECT * FROM posts WHERE id = ?', (post_id,)).fetchone()
     conn.close()
 
     if post is None:
@@ -105,5 +105,26 @@ def edit(id):
    
     #if POST, process the form data
     return render_template('edit.html', post=post)
+
+#create a route to delete post
+# delete page with post methods
+#the post id the url parametr 
+@app.route('/int:id>/delete', methods=('POST',))
+def delete(id):
+    #get the post
+    post = get_post(id)
+
+    #connect the delte quiere
+    conn = get_db_connection()
+
+    #flash sucess mesbggae 
+    conn.execute("DELETE from post WHERE id = ?", (id,))
+    #got back to home page
+    conn.commit()
+    conn.close()
+
+    flash ('"{}" was succesfully delted!'.format(post{'title'}))
+
+    return redirect(url_for('index'))
 
 app.run(port=5008)
